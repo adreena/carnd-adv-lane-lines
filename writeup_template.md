@@ -1,7 +1,4 @@
-##Writeup Template
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
 
----
 
 **Advanced Lane Finding Project**
 
@@ -22,13 +19,13 @@ Goals:
 
 ## Steps Explained
 
-###Camera Calibration
+### Camera Calibration
 
 In order to prepare input images for line detection, first it needs to be undistorted. I used the provided chessboard images in folder `camera-cal` of this project to collect detected coreners of gray-scaled chessboard images using opencv method `cv2.findChessboardCorners`. For internal corners I used 9x6 grid and prepared a default object-point with the same size, which wil be appended to list of object-points everytime all corners of a chesshboard image is detected, corners will be appended to image-points accordingly. 
 Collected points are then passed to `cv2.calibrateCamera()` to get camera-matrix and distortion-coefficients in order to undistort images using `cv2.undistort()`, here are some of the successfully detected corners:
 <table style="width:100%">
   <tr>
-    <td><img src="./document/undist01.png" width="250" height="200"/></td>
+    <td><img src="./document/undist1.png" width="250" height="200"/></td>
     <td><img src="./document/undist02.png" width="200" height="200"/></td>
     <td><img src="./document/undist03.png" width="200" height="200"/></td>
   </tr>
@@ -44,11 +41,11 @@ Note: 9x6 corners failed on finding corners for the following images:
 I used the first image to test my undistortion method, and here is the result
 <table style="width:100%">
   <tr>
-    <td><img src="./document/undist1.png" height="200"/></td>
+    <td><img src="./document/undist1-res.png" height="200"/></td>
   </tr>
 </table>
 
-###Binarization
+### Binarization
 
 I used a combination of 2 transformations:
 
@@ -66,33 +63,33 @@ I used a combination of 2 transformations:
     
   </tr>
   <tr>
-    <td><img src="./document/combined-1.png" width="450" height="250"/></td>
-    <td><img src="./document/combined-2.png" width="450" height="250"/></td>
-    <td><img src="./document/combined-3.png" width="450" height="250"/></td>
-    <td><img src="./document/combined-4.png" width="450" height="250"/></td>
+    <td><img src="./document/combined-1.png" width="450" height="300"/></td>
+    <td><img src="./document/combined-2.png" width="450" height="300"/></td>
+    <td><img src="./document/combined-3.png" width="450" height="300"/></td>
+    <td><img src="./document/combined-4.png" width="450" height="300"/></td>
   </tr>
 </table>
  
 
-###Perspective Transform
+### Perspective Transform
 
 I selected four source points for perspective transform to get an approximation as a region where lanes tend to appear.With perspective transform this region is trasnformed to bird's eye view perspective where lines look parallel and vertical.
  <table style="width:100%">
   <tr>
     <td>Original</td>
     <td>Region</td>
-    <td>Binariezed</td>
+    <td>Binarized</td>
     <td>Perspective Transform</td>
   </tr>
   <tr>
-    <td><img src="./document/combined-1.png" width="450" height="250"/></td>
-    <td><img src="./document/region.png" width="450" height="250"/></td>
-    <td><img src="./document/combined-5.png" width="450" height="250"/></td>
-    <td><img src="./document/warped.png" width="450" height="250"/></td>
+    <td><img src="./document/combined-1.png" width="450" height="300"/></td>
+    <td><img src="./document/region.png" width="450" height="300"/></td>
+    <td><img src="./document/combined-5.png" width="450" height="300"/></td>
+    <td><img src="./document/warped.png" width="450" height="300"/></td>
   </tr>
 </table>
 
-###Finding fits for the lines
+### Finding fits for the lines
 
 After bringing the most important region of the image into focus it's time to decide explicitly which pixels are part of the lines and which belong to the left line and which belong to the right line.
 
@@ -106,8 +103,8 @@ Every time 50 pixels are detected in a slide, base-lines are moved to the averag
     <td>Sliding Windows</td>
   </tr>
   <tr>
-    <td><img src="./document/histograp.png" width="550" height="250"/></td>
-    <td><img src="./document/sliding.png" width="550" height="250"/></td>
+    <td><img src="./document/histograp.png" width="550" height="300"/></td>
+    <td><img src="./document/sliding.png" width="550" height="300"/></td>
   </tr>
 </table>
 
