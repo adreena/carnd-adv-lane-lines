@@ -63,10 +63,10 @@ I used a combination of 2 transformations:
     
   </tr>
   <tr>
-    <td><img src="./document/combined-1.png" width="450" height="300"/></td>
-    <td><img src="./document/combined-2.png" width="450" height="300"/></td>
-    <td><img src="./document/combined-3.png" width="450" height="300"/></td>
-    <td><img src="./document/combined-4.png" width="450" height="300"/></td>
+    <td><img src="./document/combined-1.png" width="450" height="200"/></td>
+    <td><img src="./document/combined-2.png" width="450" height="200"/></td>
+    <td><img src="./document/combined-3.png" width="450" height="200"/></td>
+    <td><img src="./document/combined-4.png" width="450" height="200"/></td>
   </tr>
 </table>
  
@@ -82,10 +82,10 @@ I selected four source points for perspective transform to get an approximation 
     <td>Perspective Transform</td>
   </tr>
   <tr>
-    <td><img src="./document/combined-1.png" width="450" height="300"/></td>
-    <td><img src="./document/region.png" width="450" height="300"/></td>
-    <td><img src="./document/combined-5.png" width="450" height="300"/></td>
-    <td><img src="./document/warped.png" width="450" height="300"/></td>
+    <td><img src="./document/combined-1.png" width="450" height="200"/></td>
+    <td><img src="./document/region.png" width="450" height="200"/></td>
+    <td><img src="./document/combined-5.png" width="450" height="200"/></td>
+    <td><img src="./document/warped.png" width="450" height="200"/></td>
   </tr>
 </table>
 
@@ -103,8 +103,8 @@ Every time 50 pixels are detected in a slide, base-lines are moved to the averag
     <td>Sliding Windows</td>
   </tr>
   <tr>
-    <td><img src="./document/histograp.png" width="550" height="300"/></td>
-    <td><img src="./document/sliding.png" width="550" height="300"/></td>
+    <td><img src="./document/histograp.png" width="550" height="200"/></td>
+    <td><img src="./document/sliding.png" width="550" height="200"/></td>
   </tr>
 </table>
 
