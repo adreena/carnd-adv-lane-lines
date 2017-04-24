@@ -20,9 +20,7 @@ Goals:
 * Developing a robust pipeline to detect laneline on road tracks
 * Detecting outliers and how they affect the lines
 
-
-
-## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
+## Steps Explained
 
 ###Camera Calibration
 
@@ -30,9 +28,9 @@ In order to prepare input images for line detection, first it needs to be undist
 Collected points are then passed to `cv2.calibrateCamera()` to get camera-matrix and distortion-coefficients in order to undistort images using `cv2.undistort()`, here are some of the successfully detected corners:
 <table style="width:100%">
   <tr>
-    <td><img src="./documents/undist01.png" width="250" height="200"/></td>
-    <td><img src="./documents/undist02.png" width="200" height="200"/></td>
-    <td><img src="./documents/undist03.png" width="200" height="200"/></td>
+    <td><img src="./document/undist01.png" width="250" height="200"/></td>
+    <td><img src="./document/undist02.png" width="200" height="200"/></td>
+    <td><img src="./document/undist03.png" width="200" height="200"/></td>
   </tr>
 </table>
 
@@ -50,8 +48,8 @@ I used the first image to test my undistortion method, and here is the result
     <td>Undistorted</td>
   </tr>
   <tr>
-    <td><img src="./documents/undist1.png" width="250" height="200"/></td>
-    <td><img src="./documents/undist1-res.png" width="200" height="200"/></td>
+    <td><img src="./document/undist1.png" width="250" height="200"/></td>
+    <td><img src="./document/undist1-res.png" width="200" height="200"/></td>
   </tr>
 </table>
 
@@ -73,10 +71,10 @@ I used a combination of 2 transformations:
     
   </tr>
   <tr>
-    <td><img src="./documents/combined-1.png" width="250" height="200"/></td>
-    <td><img src="./documents/combined-2.png" width="200" height="200"/></td>
-    <td><img src="./documents/combined-3.png" width="250" height="200"/></td>
-    <td><img src="./documents/combined-4.png" width="200" height="200"/></td>
+    <td><img src="./document/combined-1.png" width="250" height="200"/></td>
+    <td><img src="./document/combined-2.png" width="200" height="200"/></td>
+    <td><img src="./document/combined-3.png" width="250" height="200"/></td>
+    <td><img src="./document/combined-4.png" width="200" height="200"/></td>
   </tr>
 </table>
  
@@ -92,10 +90,10 @@ I selected four source points for perspective transform to get an approximation 
     <td>Perspective Transform</td>
   </tr>
   <tr>
-    <td><img src="./documents/combined-1.png" width="250" height="200"/></td>
-    <td><img src="./documents/region.png" width="200" height="200"/></td>
-    <td><img src="./documents/combined-5.png" width="250" height="200"/></td>
-    <td><img src="./documents/warped.png" width="200" height="200"/></td>
+    <td><img src="./document/combined-1.png" width="250" height="200"/></td>
+    <td><img src="./document/region.png" width="200" height="200"/></td>
+    <td><img src="./document/combined-5.png" width="250" height="200"/></td>
+    <td><img src="./document/warped.png" width="200" height="200"/></td>
   </tr>
 </table>
 
@@ -113,8 +111,8 @@ Every time 50 pixels are detected in a slide, base-lines are moved to the averag
     <td>Sliding Windows</td>
   </tr>
   <tr>
-    <td><img src="./documents/histograp.png" width="250" height="200"/></td>
-    <td><img src="./documents/sliding.png" width="200" height="200"/></td>
+    <td><img src="./document/histograp.png" width="250" height="200"/></td>
+    <td><img src="./document/sliding.png" width="200" height="200"/></td>
   </tr>
 </table>
 
