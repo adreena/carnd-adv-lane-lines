@@ -7,46 +7,120 @@
 
 The goals / steps of this project are the following:
 
-* Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
-* Apply a distortion correction to raw images.
-* Use color transforms, gradients, etc., to create a thresholded binary image.
-* Apply a perspective transform to rectify binary image ("birds-eye view").
-* Detect lane pixels and fit to find the lane boundary.
-* Determine the curvature of the lane and vehicle position with respect to center.
-* Warp the detected lane boundaries back onto the original image.
-* Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
+* Step 1: Computing the camera calibration matrix and distortion coefficients given a set of chessboard images.
+* Step 2: Applying the distortion correction from the step 1 to raw images
+* Step 1: Using gray-scale transforms and gradients with a set of thresholdeds to create binary image.
+* Step 2: Applying a perspective transform to rectify binary image ("birds-eye view")
+* Step 3: Detecting lane pixels and fit to find the lane boundary using histogram information and sliding widnows
+* Step 4: Calculating the curvature of the lane and vehicle position with respect to center.
+* Step 5: Warp the detected lane boundaries back onto the original image.
+* Step 6: Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
-[//]: # (Image References)
+Goals:
+* Developing a robust pipeline to detect laneline on road tracks
+* Detecting outliers and how they affect the lines
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
----
-###Writeup / README
-
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
-
-You're reading it!
 ###Camera Calibration
 
-####1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
+In order to prepare input images for line detection, first it needs to be undistorted. I used the provided chessboard images in folder `camera-cal` of this project to collect detected coreners of gray-scaled chessboard images using opencv method `cv2.findChessboardCorners`. For internal corners I used 9x6 grid and prepared a default object-point with the same size, which wil be appended to list of object-points everytime all corners of a chesshboard image is detected, corners will be appended to image-points accordingly. 
+Collected points are then passed to `cv2.calibrateCamera()` to get camera-matrix and distortion-coefficients in order to undistort images using `cv2.undistort()`, here are some of the successfully detected corners:
+<table style="width:100%">
+  <tr>
+    <td><img src="./documents/undist01.png" width="250" height="200"/></td>
+    <td><img src="./documents/undist02.png" width="200" height="200"/></td>
+    <td><img src="./documents/undist03.png" width="200" height="200"/></td>
+  </tr>
+</table>
 
-The code for this step is contained in the first code cell of the IPython notebook located in "./examples/example.ipynb" (or in lines # through # of the file called `some_file.py`).  
 
-I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
+Note: 9x6 corners failed on finding corners for the following images:
 
-I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
+* camera_cal/calibration1.jpg
+* camera_cal/calibration4.jpg
+* camera_cal/calibration5.jpg
 
-![alt text][image1]
+I used the first image to test my undistortion method, and here is the result
+<table style="width:100%">
+  <tr>
+    <td>Original</td>
+    <td>Undistorted</td>
+  </tr>
+  <tr>
+    <td><img src="./documents/undist1.png" width="250" height="200"/></td>
+    <td><img src="./documents/undist1-res.png" width="200" height="200"/></td>
+  </tr>
+</table>
 
+###Binarization
+
+I used a combination of 2 transformations:
+
+ * 1- HLS Thresholding: raw image is converted to HLS channel to only keep channel `s` and I applied a threshold of [90,200]  as it does a fairly robust job of picking up the lines under very different color and contrast conditions.
+ * 2- Gradient Thresholding: raw image is converted to gray-scale and I used sobel operator in `x` orientations to find image emphasising edges vertically, threshold applied in this case [90,200].
+ 
+ output of these 2 are then combined into 1 set of points:
+ 
+ <table style="width:100%">
+  <tr>
+    <td>Original</td>
+    <td>Sobel X</td>
+    <td>HLS (S)</td>
+    <td>Combined</td>
+    
+  </tr>
+  <tr>
+    <td><img src="./documents/combined-1.png" width="250" height="200"/></td>
+    <td><img src="./documents/combined-2.png" width="200" height="200"/></td>
+    <td><img src="./documents/combined-3.png" width="250" height="200"/></td>
+    <td><img src="./documents/combined-4.png" width="200" height="200"/></td>
+  </tr>
+</table>
+ 
+
+###Perspective Transform
+
+I selected four source points for perspective transform to get an approximation as a region where lanes tend to appear.With perspective transform this region is trasnformed to bird's eye view perspective where lines look parallel and vertical.
+ <table style="width:100%">
+  <tr>
+    <td>Original</td>
+    <td>Region</td>
+    <td>Binariezed</td>
+    <td>Perspective Transform</td>
+  </tr>
+  <tr>
+    <td><img src="./documents/combined-1.png" width="250" height="200"/></td>
+    <td><img src="./documents/region.png" width="200" height="200"/></td>
+    <td><img src="./documents/combined-5.png" width="250" height="200"/></td>
+    <td><img src="./documents/warped.png" width="200" height="200"/></td>
+  </tr>
+</table>
+
+###Finding fits for the lines
+
+After bringing the most important region of the image into focus it's time to decide explicitly which pixels are part of the lines and which belong to the left line and which belong to the right line.
+
+For this step, I draw histogram of the lower half of the warped image as it has the starting pixels of the lines. Histogram would display the two most prominent peaks with spikes in x-axis and these will be of the base of the lane lines. From that point, I use a sliding window, placed around the line centers, to find and follow the lines up to the top of the frame.
+The strategy to use base-lines is to divide image into multiple windows from y-axis and process each slide from bottom to the top to find good pixels and adjust the lines for the next slide.
+Every time 50 pixels are detected in a slide, base-lines are moved to the average point of these pixels to be able to capture curves more precisley. All the good points are collected as a list and passed to polyfit to generate coefficents for drawing left & right lines.
+
+ <table style="width:100%">
+  <tr>
+    <td>Histogram</td>
+    <td>Sliding Windows</td>
+  </tr>
+  <tr>
+    <td><img src="./documents/histograp.png" width="250" height="200"/></td>
+    <td><img src="./documents/sliding.png" width="200" height="200"/></td>
+  </tr>
+</table>
+
+ 
+ 
+ 
 ###Pipeline (single images)
 
 ####1. Provide an example of a distortion-corrected image.
