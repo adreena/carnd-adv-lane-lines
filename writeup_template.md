@@ -225,8 +225,8 @@ In the frist challenge video, I noticed that low-contrast in challenge video fra
     <td>Combined HLS and Sobelx</td>
   </tr>
   <tr>
+    <td><img src="./document/fram2-hls.png" width="550" height="200"/></td>
     <td><img src="./document/fram2-hlsandsobel.png" width="550" height="200"/></td>
-    <td><img src="./document/fram2-region.png" width="550" height="200"/></td>
   </tr>
   <tr>
     <td>Histogram</td>
