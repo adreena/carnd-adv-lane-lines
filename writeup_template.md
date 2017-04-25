@@ -132,8 +132,9 @@ First, image is undistorted using callibration matrix and distortion coefficient
 | 300,690      | 200, 520      |
 
 ```
-#image size : (720, 1280)
-destination_vertices: [[offset,offset],[img_size[1]-offset,offset],[img_size[1]-offset,img_size[0]-offset],[offset,img_size[0]-offset]]```
+//image size : (720, 1280)
+destination_vertices: [[offset,offset],[img_size[1]-offset,offset],[img_size[1]-offset,img_size[0]-offset],[offset,img_size[0]-offset]]
+```
 
 Next, warped-image is passed to my module `sliding_window_histogram` to find line-fits, as explained earlier I split the warped-image into halves, and draw histogram of the lower half becuase it has the starting pixels of the lines. Histogram contains information about the two most prominent peaks with spikes in x-axis. From that point, I use a sliding window, placed around the line centers, to find and follow the lines up to the top of the frame.
 I divide the warped-image into 9 windows from y-axis and start processing slides from the bottom to the top to find good pixels and adjust the center-lines for the next slide.
@@ -152,6 +153,7 @@ As frames populate these class variables, I check for position to be in `1(meter
 Additionaly, I calculate an expected slope-value with an offset of `0.15` based on the derivative and fit-coefficients of the previous-frame. For calculating the slope I first take the derivative of the fit Ay^2+By+C -> 2*Ay + B, and pass the vertical-center of the frame (height/2) to get and estimate for the slope. 
 
 Lastly I compare current curve with the previous-frame curve with offset of`50`. For calculating the radius curve I used the project guidelines, by taking 1st and 2nd order derivates of Ax^2 + Bx +C and applying them to the formula below:
+
 `R-curve= ((1+(2Ay+B)^2)^(3/2))/∣2A∣`
 
 If all conditions are met, frame is a good match and will be appended to my list of lines instances.
