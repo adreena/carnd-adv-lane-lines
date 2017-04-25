@@ -143,9 +143,17 @@ Some of the main featres I keep my eyes on are:
     * `current_fit`: line coefficients; to keep track of current frame for next new frames in case I need to adjust the new frame
     * `allx` & `ally`: all x and y points of the line; to keep track of current fit to do further adjustments for new frames if necessary
 
-As frames populate these class variables, I check for position to be in `1(meter)` offset from previous frame, then based on the previous frame coefficients I calculate an expected slope value with an offset of `0.15`. lastly I compare current curve with the previous frame curve with offset of`50`. If all conditions are met, frame is a good match and will be appended to my list of lines instances.
+As frames populate these class variables, I check for position to be in `1(meter)` offset from the center of the frame. For measuring this distance I take the absoloute difference between the center of fame on horizontal axis (y=0) and the correlated point with y=0 of the fit-line (right or left).
 
-If a line couldn't meet the criteria, I'll copy the previous-frame coefficients,allx & ally to recalculate the fit & curves and slopes.
+Additionaly, I calculate an expected slope-value with an offset of `0.15` based on the derivative and fit-coefficients of the previous-frame. For calculating the slope I first take the derivative of the fit Ay^2+By+C -> 2*Ay + B, and pass the vertical-center of the frame (height/2) to get and estimate for the slope. 
+
+Lastly I compare current curve with the previous-frame curve with offset of`50`. For calculating the radius curve I used the project guidelines, by taking 1st and 2nd order derivates of Ax^2 + Bx +C and applying them to the formula below:
+`R-curve= ((1+(2Ay+B)^2)^(3/2))/∣2A∣`
+
+If all conditions are met, frame is a good match and will be appended to my list of lines instances.
+
+If a line didn't meet the criteria, I'll copy the previous-frame coefficients,allx & ally to recalculate the fit & curves and slopes.
+
 Finally I cast the lines onto the original frame and move on to the next frame.
 
 Here's a full flow of original image through the entire pipeline:
@@ -182,48 +190,25 @@ Here's a full flow of original image through the entire pipeline:
 </table>
 
 
-![alt text][image3]
-
-####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
-
-
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
-
-![alt text][image4]
-
-####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
-
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
-
-![alt text][image5]
-
-####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
-
-I did this in lines # through # in my code in `my_other_file.py`
-
-####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
-
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
-
-![alt text][image6]
+Challenge Videos:
 
 ---
 
-###Pipeline (video)
+### Pipeline (video)
 
-####1. Final video output. 
+####  Final video output. 
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [https://github.com/chocolateHszd/carnd-adv-lane-lines/blob/master/project_output.mp4](./project_output.mp4)
 
-Challenge video [](./project_video.mp4)
+Challenge video [https://github.com/chocolateHszd/carnd-adv-lane-lines/blob/master/challenge_output.mp4](./challenge_output.mp4)
 
-Harder Challenge [](./project_video.mp4)
+Harder Challenge [https://github.com/chocolateHszd/carnd-adv-lane-lines/blob/master/harder_challenge_output.mp4](./harder_challenge_output.mp4)
 
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+Although computer vision is a strong tool in lae detection; it is not enough for driving smoothly especially in curves and sudden road changes, in the set of experminets we're bound to whatever frames we have cached so far to do some minor corrections to upcoming frames. This would fail in a case where our very first captures contain noise and would damage new frames because of the criteria we have by comparing new images to averages and previous frames.
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I checked the line positions to have an approximatly good distance from the center of the camera, also I avoid sudden slope changes by comparing the slope with the previous frame's slope and there are conditions to check the curve to be almost aligned with the previous frame. However the pipeline still lacks training phase, as next step I would like to combine this cv knowledge with deep learning techniques from last projects to get better and smarter corrections based on enough training data and patterns. 
 
