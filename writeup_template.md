@@ -121,16 +121,19 @@ The final step is projecting the measurement back down onto the image. I used th
 ### Pipeline (single images)
 
 As mentioned in previous section, each frame of image goes thorugh 5 main steps:
-first, image is undistorted using callibration matrix and distortion coefficients from chessboard images. The image is then binarized through combination of gradient sobelx and saturation channel in HLS. To get perspective transform, I marked a region on image where lanes usually appear and warped them to bird's eye view usign `offset=200`:
+
+First, image is undistorted using callibration matrix and distortion coefficients from chessboard images. The image is then binarized through combination of gradient sobelx and saturation channel in HLS. To get perspective transform, I marked a region on image where lanes usually appear and warped them to bird's eye view using `offset=200`:
 
 | Source       | Destination   | 
 |:------------:|:-------------:| 
-| 520,520      | 320, 0        | 
-| 830,520      | 320, 720      |
-| 1150,690     | 960, 720      |
-| 300,690      | 960, 0        |
+| 520,520      | 200, 200      | 
+| 830,520      | 1260, 200     |
+| 1150,690     | 1260, 520     |
+| 300,690      | 200, 520      |
 
-```destination_vertices: [[offset,offset],[img_size[1]-offset,offset],[img_size[1]-offset,img_size[0]-offset],[offset,img_size[0]-offset]]```
+```
+#image size : (720, 1280)
+destination_vertices: [[offset,offset],[img_size[1]-offset,offset],[img_size[1]-offset,img_size[0]-offset],[offset,img_size[0]-offset]]```
 
 Next, warped-image is passed to my module `sliding_window_histogram` to find line-fits, as explained earlier I split the warped-image into halves, and draw histogram of the lower half becuase it has the starting pixels of the lines. Histogram contains information about the two most prominent peaks with spikes in x-axis. From that point, I use a sliding window, placed around the line centers, to find and follow the lines up to the top of the frame.
 I divide the warped-image into 9 windows from y-axis and start processing slides from the bottom to the top to find good pixels and adjust the center-lines for the next slide.
@@ -138,6 +141,7 @@ With pixel-threshold of 50 pixels, I decide to whether adjust my center-line bas
 
 After the fits are calculate, I create 2 Line() instances for the left & the right lines. Line class holds some feature information for doing frame correction in processing a sequence of images, so I keep all the good lines in a list.
 Some of the main featres I keep my eyes on are:
+
     * `line_base_pos` : the position of the line relative to the center of the image; to check the position of the line with previous frame within an offset to avoid jumps
     * `radius_of_curvature`: curve of the line; to check the cruve of the line with previous frame to avoid jumps
     * `current_fit`: line coefficients; to keep track of current frame for next new frames in case I need to adjust the new frame
@@ -163,37 +167,29 @@ Here's a full flow of original image through the entire pipeline:
     <td>Original</td>
     <td>Undistorted</td>
     <td>Gradient Sobel x Transform</td>
-  </tr>
-  <tr>
-    <td><img src="./document/fram1-original.png" width="350" height="200"/></td>
-    <td><img src="./document/fram1-undistorted.png" width="350" height="200"/></td>
-    <td><img src="./document/fram1-sobel.png" width="350" height="200"/></td>
-  </tr>
-  <tr>
     <td>HLS (S) Transform</td>
     <td>Combined HLS & Sobelx</td>
+  </tr>
+  <tr>
+    <td><img src="./document/frame1-original.png" width="550" height="200"/></td>
+    <td><img src="./document/frame1-undistorted.png" width="550" height="200"/></td>
+    <td><img src="./document/frame1-sobel.png" width="550" height="200"/></td>
+    <td><img src="./document/frame1-hls.png" width="550" height="200"/></td>
+    <td><img src="./document/frame1-hlsandsobel.png" width="550" height="200"/></td>
+  </tr>
+  <tr>
     <td>Region</td>
-  </tr>
-  <tr>
-    <td><img src="./document/fram1-hls.png" width="350" height="200"/></td>
-    <td><img src="./document/fram1-hlsandsobel.png" width="350" height="200"/></td>
-    <td><img src="./document/fram1-region.png" width="350" height="200"/></td>
-  </tr>
-  <tr>
     <td>Warped</td>
     <td>Histogram</td>
     <td>Sliding Windows</td>
-  </tr>
-  <tr> 
-    <td><img src="./document/fram1-warped.png" width="350" height="200"/></td>
-    <td><img src="./document/fram1-histogram.png" width="350" height="200"/></td>
-    <td><img src="./document/fram1-sliding-widnows.png" width="350" height="200"/></td>
-  </tr>
-  <tr>
     <td>output</td>
   </tr>
   <tr>
-      <td><img src="./document/fram1-output.png" width="250" height="200"/></td>
+    <td><img src="./document/frame1-region.png" width="550" height="200"/></td>
+    <td><img src="./document/frame1-warped.png" width="550" height="200"/></td>
+    <td><img src="./document/frame1-histogram.png" width="550" height="200"/></td>
+    <td><img src="./document/frame1-sliding-widnows.png" width="550" height="200"/></td>
+    <td><img src="./document/frame1output.png" width="550" height="200"/></td>
   </tr>
 </table>
 
