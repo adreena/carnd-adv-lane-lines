@@ -208,6 +208,7 @@ Here's a full flow of original image through the entire pipeline:
 ### Challenge Vidoes:
 
 In the frist challenge video, I noticed that low-contrast in challenge video frames usually results in no lane detection specifically on the left side which results in a distorted left-fitx , as shown in the last image of the sequence below:
+
 <table>
   <tr>
     <td>Origianl</td>
