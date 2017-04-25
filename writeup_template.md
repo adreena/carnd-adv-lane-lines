@@ -231,12 +231,10 @@ In the frist challenge video, I noticed that low-contrast in challenge video fra
     <td><img src="./document/fram2-region.png" width="550" height="200"/></td>
   </tr>
   <tr>
-    <td>Warped</td>
     <td>Histogram</td>
     <td>Sliding Windows</td>
   </tr>
   <tr>
-    <td><img src="./document/fram2-warped.png" width="550" height="200"/></td>
     <td><img src="./document/fram2-histogram.png" width="550" height="200"/></td>
     <td><img src="./document/fram2-histogram-wrong.png" width="550" height="200"/></td>  
   </tr>
@@ -271,7 +269,7 @@ By applying this fix, I was able to get a much better result for the weak lines:
   </tr>
   <tr>
     <td><img src="./document/fram2-histogram-wrong.png" width="550" height="200"/></td>
-    <td><img src="./document/fram2-sliding-windows.png" width="550" height="200"/></td>  
+    <td><img src="./document/fram2-sliding-widnows.png" width="550" height="200"/></td>  
   </tr>
 </table>
 
