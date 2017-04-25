@@ -140,7 +140,8 @@ Next, warped-image is passed to my module `sliding_window_histogram` to find lin
 I divide the warped-image into 9 windows from y-axis and start processing slides from the bottom to the top to find good pixels and adjust the center-lines for the next slide.
 With pixel-threshold of 50 pixels, I decide to whether adjust my center-line based on new findings or not. If the condition met in a slide, center-lines are moved to the average point of these pixels which enables me to capture curves more precisley. All the good points are collected as a list and passed to polyfit to generate coefficents for drawing left & right lines.
 
-After the fits are calculate, I create 2 Line() instances for the left & the right lines. Line class holds some feature information for doing frame correction in processing a sequence of images, so I keep all the good lines in a list.
+After the line-fits are calculated, I create 2 Line() instances for the left & the right line. Line class holds some feature-information for doing frame correction in processing a sequence of images. I also keep all the good lines in a list for comparison and correction purposes of upcoming frames.
+
 Some of the main featres I keep my eyes on are:
 
     * `line_base_pos` : the position of the line relative to the center of the image; to check the position of the line with previous frame within an offset to avoid jumps
@@ -148,17 +149,19 @@ Some of the main featres I keep my eyes on are:
     * `current_fit`: line coefficients; to keep track of current frame for next new frames in case I need to adjust the new frame
     * `allx` & `ally`: all x and y points of the line; to keep track of current fit to do further adjustments for new frames if necessary
 
-As frames populate these class variables, I check for position to be in `1(meter)` offset from the center of the frame. For measuring this distance I take the absoloute difference between the center of fame on horizontal axis (y=0) and the correlated point with y=0 of the fit-line (right or left).
+As frames populate these class variables I check 3 conditions:
 
-Additionaly, I calculate an expected slope-value with an offset of `0.15` based on the derivative and fit-coefficients of the previous-frame. For calculating the slope I first take the derivative of the fit Ay^2+By+C -> 2*Ay + B, and pass the vertical-center of the frame (height/2) to get and estimate for the slope. 
+* 1- I check for position to be in `1(meter)` offset from the center of the frame. For measuring this distance I take the absoloute difference between the center of frame on horizontal axis (y=0) and the correlated point with y=0 of the fit-line (right or left).
 
-Lastly I compare current curve with the previous-frame curve with offset of`50`. For calculating the radius curve I used the project guidelines, by taking 1st and 2nd order derivates of Ax^2 + Bx +C and applying them to the formula below:
+* 2- Additionaly, I estimate an approximate slope-value with an offset of `0.15` based on the derivative and fit-coefficients of the previous-frame. For calculating the slope I take the derivative of the fit Ay^2+By+C -> 2*Ay + B, and pass the vertical-center of the frame (height/2) to get and estimate for the slope. 
+
+* 3- Lastly I compare current curve with the previous-frame's curve with offset of `50`. For calculating the radius curve I used the project guidelines, by taking 1st and 2nd order derivates of Ay^2 + By +C and applying them to the formula below:
 
 `R-curve= ((1+(2Ay+B)^2)^(3/2))/∣2A∣`
 
 If all conditions are met, frame is a good match and will be appended to my list of lines instances.
 
-If a line didn't meet the criteria, I'll copy the previous-frame coefficients,allx & ally to recalculate the fit & curves and slopes.
+If a line didn't meet the criteria, I'll copy the previous-frame's features such as coefficients, allx & ally to recalculate the fit & curves and slopes.
 
 Finally I cast the lines onto the original frame and move on to the next frame.
 
