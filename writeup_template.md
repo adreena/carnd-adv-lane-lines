@@ -222,7 +222,7 @@ In the frist challenge video, I noticed that low-contrast in challenge video fra
   </tr>
   <tr>
     <td>HLS (S) Transform</td>
-    <td>Combined HLS & Sobelx</td>
+    <td>Combined HLS and Sobelx</td>
     <td>Region</td>
   </tr>
   <tr>
