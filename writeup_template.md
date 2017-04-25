@@ -176,11 +176,11 @@ Here's a full flow of original image through the entire pipeline:
     <td>Combined HLS & Sobelx</td>
   </tr>
   <tr>
-    <td><img src="./document/frame1-original.png" width="550" height="200"/></td>
-    <td><img src="./document/frame1-undistorted.png" width="550" height="200"/></td>
-    <td><img src="./document/frame1-sobel.png" width="550" height="200"/></td>
-    <td><img src="./document/frame1-hls.png" width="550" height="200"/></td>
-    <td><img src="./document/frame1-hlsandsobel.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-original.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-undistorted.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-sobel.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-hls.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-hlsandsobel.png" width="550" height="200"/></td>
   </tr>
   <tr>
     <td>Region</td>
@@ -190,11 +190,11 @@ Here's a full flow of original image through the entire pipeline:
     <td>output</td>
   </tr>
   <tr>
-    <td><img src="./document/frame1-region.png" width="550" height="200"/></td>
-    <td><img src="./document/frame1-warped.png" width="550" height="200"/></td>
-    <td><img src="./document/frame1-histogram.png" width="550" height="200"/></td>
-    <td><img src="./document/frame1-sliding-widnows.png" width="550" height="200"/></td>
-    <td><img src="./document/frame1output.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-region.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-warped.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-histogram.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-sliding-widnows.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-output.png" width="550" height="200"/></td>
   </tr>
 </table>
 
