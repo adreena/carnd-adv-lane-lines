@@ -172,34 +172,40 @@ Here's a full flow of original image through the entire pipeline:
     <td>Original</td>
     <td>Undistorted</td>
     <td>Gradient Sobel x Transform</td>
-    <td>HLS (S) Transform</td>
-    <td>Combined HLS & Sobelx</td>
   </tr>
   <tr>
     <td><img src="./document/fram1-original.png" width="550" height="200"/></td>
     <td><img src="./document/fram1-undistorted.png" width="550" height="200"/></td>
     <td><img src="./document/fram1-sobel.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-hls.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-hlsandsobel.png" width="550" height="200"/></td>
   </tr>
   <tr>
+    <td>HLS (S) Transform</td>
+    <td>Combined HLS & Sobelx</td>
     <td>Region</td>
+  </tr>
+  <tr>
+    <td><img src="./document/fram1-hls.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-hlsandsobel.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-region.png" width="550" height="200"/></td>
+  </tr>
+  <tr>
     <td>Warped</td>
     <td>Histogram</td>
     <td>Sliding Windows</td>
-    <td>output</td>
   </tr>
   <tr>
-    <td><img src="./document/fram1-region.png" width="550" height="200"/></td>
     <td><img src="./document/fram1-warped.png" width="550" height="200"/></td>
     <td><img src="./document/fram1-histogram.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-sliding-widnows.png" width="550" height="200"/></td>
+    <td><img src="./document/fram1-sliding-widnows.png" width="550" height="200"/></td>  
+  </tr>
+  <tr>
+      <td>output</td>
+  </tr>
+  <tr>
     <td><img src="./document/fram1-output.png" width="550" height="200"/></td>
   </tr>
 </table>
 
-
-Challenge Videos:
 
 ---
 
