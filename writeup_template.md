@@ -293,8 +293,7 @@ I managed to fix this issue by gamma correction to make frames darker and icorpo
 </table>
 
 
-For the final challenge I ended up shrinking the height selected region becuase of sharp curves as well as
-the width to fit within the lanes, but sun reflection and flares are adding a lot of noise to the frames which makes it hard for the model to detect lines.
+For the final challenge I ended up setting bas_frames_limit to 1 and shrinking the height selected region becuase of sharp curves as well as the width to fit within the lanes, but sun reflection and flares are adding a lot of noise to the frames which makes it hard for the model to detect lines.
 
 ---
 
@@ -314,5 +313,5 @@ Harder Challenge [harder_challenge_output](./harder_challenge_output.mp4)
 
 Although computer vision is a strong tool in lane detection; it is not enough for driving smoothly especially in curves and sudden road changes, in this set of experminets we're bound to whatever frames we have cached so far to do some minor corrections to upcoming frames. This would fail in a case where our very first captures contain noise and would damage new frames because of the criteria we have by comparing new images to averages and previous frames.
 
-I checked the line positions to have an approximatly good distance from the center of the camera, also I avoid sudden slope changes by comparing the slope with the previous frame's slope and there are conditions to check the curve to be almost aligned with the previous frame and doesn't  exceed 1km. However the pipeline still lacks training phase, as next step I would like to combine this cv knowledge with deep learning techniques from last projects to get better and smarter corrections based on enough training data and patterns. 
+I checked the line positions to have an approximatly good distance from the center of the camera, also I avoid sudden slope changes by comparing the slope with the previous frame's slope and there are conditions to check the curve to be almost aligned with the previous frame and have expected values for x and y coordinates. However the pipeline still lacks training phase, as next step I would like to combine this cv knowledge with deep learning techniques from last projects to get better and smarter corrections based on enough training data and patterns. 
 
