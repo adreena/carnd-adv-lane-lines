@@ -238,7 +238,7 @@ A sample with high illumniation and very dark shadowsshadows (with Gamma-correct
   </tr>
   <tr>
     <td><img src="./document/frame_correction/very_bad_lines.png" width="550" height="200"/></td>
-    <td><img src="./document/frame_correction/very_bad_output.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/very bad_output.png" width="550" height="200"/></td>
   </tr>
 </table>
 
