@@ -77,6 +77,8 @@ I selected four source points for perspective transform to get an approximation 
   <tr>
     <td>Original</td>
     <td>Binarized</td>
+    <td>Region</td>
+    <td>Warped</td>
   </tr>
   <tr>
     <td><img src="./document/combined-1.png" width="450" height="200"/></td>
