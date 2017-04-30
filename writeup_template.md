@@ -293,7 +293,7 @@ I managed to fix this issue by gamma correction to make frames darker and icorpo
 </table>
 
 
-For the final challenge I ended up setting bas_frames_limit to 1 and shrinking the height selected region becuase of sharp curves as well as the width to fit within the lanes, but sun reflection and flares are adding a lot of noise to the frames which makes it hard for the model to detect lines.
+For the final challenge I ended up shrinking the height selected region becuase of sharp curves as well as the width to fit within the lanes, but sun reflection and flares are adding a lot of noise to the frames which makes it hard for the model to detect lines.
 
 ---
 
