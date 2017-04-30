@@ -272,7 +272,7 @@ I managed to fix this issue by gamma correction to make frames darker and icorpo
 **With Gamma Correction**
 <table>
   <tr>
-    <td>Corrected</td>
+    <td>Gamma Correction 0.5</td>
     <td>Binary</td>
     <td>Histogram</td> 
   </tr>
