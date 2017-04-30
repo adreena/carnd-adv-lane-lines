@@ -76,15 +76,14 @@ I selected four source points for perspective transform to get an approximation 
  <table style="width:100%">
   <tr>
     <td>Original</td>
-    <td>Region</td>
     <td>Binarized</td>
-    <td>Perspective Transform</td>
   </tr>
   <tr>
     <td><img src="./document/combined-1.png" width="450" height="200"/></td>
-    <td><img src="./document/region.png" width="450" height="200"/></td>
     <td><img src="./document/combined-5.png" width="450" height="200"/></td>
-    <td><img src="./document/warped.png" width="450" height="200"/></td>
+  </tr>
+  <tr>
+  <td><img src="./document/region.png" width="450" height="200"/></td>
   </tr>
 </table>
 
