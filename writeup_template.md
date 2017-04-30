@@ -83,7 +83,7 @@ I selected four source points for perspective transform to get an approximation 
     <td><img src="./document/combined-5.png" width="450" height="200"/></td>
   </tr>
   <tr>
-  <td><img src="./document/region.png" width="450" height="200"/></td>
+  <td><img src="./document/region.png" height="200"/></td>
   </tr>
 </table>
 
