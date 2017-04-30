@@ -173,7 +173,7 @@ For calculating curve, I used the project guidelines, I took 1st and 2nd order d
 
 Finally I cast the lines onto the original frame and move on to the next frame.
 
-Here's a full flow of original image through the entire pipeline for a good image:
+Here's a full flow of original image through the entire pipeline for a hish illumination image:
 
 <table style="width:100%">
   <tr>
@@ -196,42 +196,49 @@ Here's a full flow of original image through the entire pipeline for a good imag
   </tr>
 </table>
 
-A sample of high illumniation pavements with Gamma-correction:
+A sample with illumniation and shadows (with Gamma-correction), as shown in binary image, with gamma correction I was able to keep the lines bright enough for the sobelx and hls to get selected:
 
 <table style="width:100%">
   <tr>
     <td>Original</td>
-    <td>Undistorted</td>
-    <td>Gradient Sobel x Transform </td>
+    <td>Binary combination With Gamma Correction</td>
+    <td>Histogram</td>
   </tr>
   <tr>
-    <td><img src="./document/fram1-original.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-undistorted.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-sobel.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/bad_org.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/bad_gamma.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/bad_hist.png" width="550" height="200"/></td>
   </tr>
   <tr>
-    <td>HLS (S) Transform</td>
-    <td>Combined HLS & Sobelx</td>
-    <td>Region</td>
+    <td>Warped with lines</td>
+    <td>Output</td>
   </tr>
   <tr>
-    <td><img src="./document/fram1-hls.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-hlsandsobel.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-region.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/bad_lines.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/bad_output.png" width="550" height="200"/></td>
+  </tr>
+</table>
+
+A sample with high illumniation and very dark shadowsshadows (with Gamma-correction), frame is still holding on to its previous frame features to keep the lines in place, otherwise shadow is and bright reflections are causing a lot of white pixels:
+
+<table style="width:100%">
+  <tr>
+    <td>Original</td>
+    <td>Binary combination With Gamma Correction</td>
+    <td>Histogram</td>
   </tr>
   <tr>
-    <td>Warped</td>
-    <td>Sliding Windows</td>
+    <td><img src="./document/frame_correction/very_bad_org.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/very_bad_gamma.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/very_bad_hist.png" width="550" height="200"/></td>
   </tr>
   <tr>
-    <td><img src="./document/fram1-warped.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-sliding-widnows.png" width="550" height="200"/></td>  
+    <td>Warped with lines</td>
+    <td>Output</td>
   </tr>
   <tr>
-      <td>output</td>
-  </tr>
-  <tr>
-    <td><img src="./document/fram1-output.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/very_bad_lines.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/very_bad_output.png" width="550" height="200"/></td>
   </tr>
 </table>
 
