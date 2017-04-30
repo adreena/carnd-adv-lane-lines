@@ -228,9 +228,9 @@ A sample with high illumniation and very dark shadowsshadows (with Gamma-correct
     <td>Histogram</td>
   </tr>
   <tr>
-    <td><img src="./document/frame_correction/very_bad_org.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/very_bad.png" width="550" height="200"/></td>
     <td><img src="./document/frame_correction/very_bad_gamma.png" width="550" height="200"/></td>
-    <td><img src="./document/frame_correction/very_bad_hist.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/very_bad_his.png" width="550" height="200"/></td>
   </tr>
   <tr>
     <td>Warped with lines</td>
