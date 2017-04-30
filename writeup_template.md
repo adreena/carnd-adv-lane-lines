@@ -164,7 +164,7 @@ As frames populate these class variables I check 3 conditions:
 If all conditions are satisfied, frame is a good match and will be appended to my list of line-instances.
 
 If a line didn't meet the criteria, I'll copy the previous-frame's features such as coefficients, allx & ally to the lines and append a copy of the previous frame to line-instances and I increment `bad_frame_counter` by 1.
-After each frame is processed I check the `white ratio` to see if it's decreasing, meaning that bad illumination areas are ending, I also check the number of `bad_frames_counter` to clean my instances cache to cache new information and readjust my lanes.
+After each frame is processed I check the `white ratio` to see if it's decreasing, meaning that bad illumination areas are ending, I also check the number of `bad_frames_counter`, limit is `3`, to clean my instances cache to cache new information and readjust my lanes.
 
 Lastly, I keep track of the current radius curve to check if it's not exceeding 1km, however sometimes in straight curve radius goes beyond 1km and I assume it's becuase the slope is almost reaching ~0.000 so I decided not to includ it in my evaluation criteria as it causes all of my frames with straight_lanes freeze and copy their previous state. 
 For calculating curve, I used the project guidelines, I took 1st and 2nd order derivates of Ay^2 + By +C and applied them to the formula below:
@@ -238,7 +238,7 @@ A sample with high illumniation and very dark shadowsshadows (with Gamma-correct
   </tr>
   <tr>
     <td><img src="./document/frame_correction/very_bad_lines.png" width="550" height="200"/></td>
-    <td><img src="./document/frame_correction/very bad_output.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/very_bad_output.png" width="550" height="200"/></td>
   </tr>
 </table>
 
@@ -246,37 +246,28 @@ A sample with high illumniation and very dark shadowsshadows (with Gamma-correct
 
 In the frist challenge video, I noticed that low-contrast in challenge video frames usually results in no lane detection specifically on the left side which results in a distorted left-fitx , as shown in the last image of the sequence below:
 
+** Without Gamma Correction **
+
 <table>
   <tr>
     <td>Origianl</td>
-    <td>Undistorted</td>
+    <td>Binary</td>
+    <td>Histogram</td> 
   </tr>
    <tr>
-    <td><img src="./document/fram2-original.png" width="550" height="200"/></td>
-    <td><img src="./document/fram2-undistorted.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_bad_org.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_bad_without_gamma.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_bad_hist.png" width="550" height="200"/></td>
   </tr>
   <tr>
-    <td>Gradient Sobel x and HLS (S) Transform Without Gamma-correcttion</td>
-    <td>Warped</td>
-  </tr>
-  <tr>
-    <td><img src="./document/fram2-hls.png" width="550" height="200"/></td>
-    <td><img src="./document/fram2-hlsandsobel.png" width="550" height="200"/></td>
-  </tr>
-   <tr>
-    <td>Gradient Sobel x and HLS (S) and RGB (R) Transform With Gamma-correcttion</td>
-    <td>Warped</td>
-  </tr>
-  <tr>
-    <td><img src="./document/fram2-hls.png" width="550" height="200"/></td>
-    <td><img src="./document/fram2-hlsandsobel.png" width="550" height="200"/></td>
-  </tr>
-  <tr>
+    <td>Lines</td>
     <td>Output</td>
-    <td>Warped</td>
   </tr>
   <tr>
-    <td><img src="./document/fram2-hls.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_bad_lines.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_bad_output.png" width="550" height="200"/></td>
+  </tr>
+
 </table>
 
 I managed to fix this issue by gamma correction to make frames darker and icorporating red channel from RGB in my binary trasnformations along with hls and sobelx, which resulted in detecting enough pixels to create a line .
