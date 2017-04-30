@@ -279,7 +279,7 @@ I managed to fix this issue by gamma correction to make frames darker and icorpo
   </tr>
    <tr>
     <td><img src="./document/frame_correction/challenge_good_org.png" width="550" height="200"/></td>
-    <td><img src="./document/frame_correction/challenge_good_without_gamma.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_good_gamma.png" width="550" height="200"/></td>
     <td><img src="./document/frame_correction/challenge_good_hist.png" width="550" height="200"/></td>
   </tr>
   <tr>
