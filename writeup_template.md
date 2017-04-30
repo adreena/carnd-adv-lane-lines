@@ -246,8 +246,7 @@ A sample with high illumniation and very dark shadowsshadows (with Gamma-correct
 
 In the frist challenge video, I noticed that low-contrast in challenge video frames usually results in no lane detection specifically on the left side which results in a distorted left-fitx , as shown in the last image of the sequence below:
 
-** Without Gamma Correction **
-
+**Without Gamma Correction**
 <table>
   <tr>
     <td>Origianl</td>
@@ -267,10 +266,33 @@ In the frist challenge video, I noticed that low-contrast in challenge video fra
     <td><img src="./document/frame_correction/challenge_bad_lines.png" width="550" height="200"/></td>
     <td><img src="./document/frame_correction/challenge_bad_output.png" width="550" height="200"/></td>
   </tr>
+</table>
+
+I managed to fix this issue by gamma correction to make frames darker and icorporating red channel from RGB in my binary trasnformations along with hls and sobelx, which resulted in detecting enough pixels to create a line. Following is the result on the same frame I used above.
+
+**With Gamma Correction**
+<table>
+  <tr>
+    <td>Origianl</td>
+    <td>Binary</td>
+    <td>Histogram</td> 
+  </tr>
+   <tr>
+    <td><img src="./document/frame_correction/challenge_good_org.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_good_without_gamma.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_good_hist.png" width="550" height="200"/></td>
+  </tr>
+  <tr>
+    <td>Lines</td>
+    <td>Output</td>
+  </tr>
+  <tr>
+    <td><img src="./document/frame_correction/challenge_good_lines.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/challenge_good_output.png" width="550" height="200"/></td>
+  </tr>
 
 </table>
 
-I managed to fix this issue by gamma correction to make frames darker and icorporating red channel from RGB in my binary trasnformations along with hls and sobelx, which resulted in detecting enough pixels to create a line .
 
 For the final challenge I ended up shrinking the height selected region becuase of sharp curves as well as
 the width to fit within the lanes, but sun reflection and flares are adding a lot of noise to the frames which makes it hard for the model to detect lines.
