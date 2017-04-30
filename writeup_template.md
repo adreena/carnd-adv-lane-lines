@@ -8,7 +8,7 @@ The goals / steps of this project are the following:
 * Step 2: Applying the distortion correction from the step 1 to raw images
 * Step 1: Using gray-scale transforms and gradients with a set of thresholdeds to create binary image.
 * Step 2: Applying a perspective transform to rectify binary image ("birds-eye view")
-* Step 3: Detecting lane pixels and fit to find the lane boundary using histogram information and sliding widnows
+* Step 3: Detecting lane pixels and fit to find the lane boundary using histogram information and sliding widnows (used gamma correction to fix illumination and shadows)
 * Step 4: Calculating the curvature of the lane and vehicle position with respect to center.
 * Step 5: Warp the detected lane boundaries back onto the original image.
 * Step 6: Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
@@ -20,7 +20,7 @@ Goals:
 
 ### 1- Camera Calibration
 
-In order to prepare input images for line detection, first it needs to be undistorted. I used the provided chessboard images in folder `camera-cal` of this project to collect all detected coreners of gray-scaled chessboard images using opencv method `cv2.findChessboardCorners`. For internal corners I used 9x6 grid and prepared a default object-point with the same size, which wil be appended to list of object-points everytime all corners of a chesshboard image is detected, corners will be appended to image-points accordingly. 
+In order to prepare input images for line detection, first step is to undistort the image. I used the provided chessboard images in folder `camera-cal` of this project to collect all detected coreners of gray-scaled chessboard images using opencv method `cv2.findChessboardCorners`. For internal corners I used `9x6` grid and prepared a default object-point with the same size, which wil be appended to list of object-points everytime all corners of a chesshboard image is detected, corners will be appended to image-points accordingly. 
 Collected points are then passed to `cv2.calibrateCamera()` to get camera-matrix and distortion-coefficients to undistort images by using `cv2.undistort()`, here are some of the successfully detected corners:
 <table style="width:100%">
   <tr>
@@ -72,7 +72,7 @@ For simplifying images and focusing only on certain features of the road, I comb
 
 ### 3- Perspective Transform
 
-I selected four source points for perspective transform to get an approximation as a region where lanes tend to appear.With perspective transform this region is trasnformed to bird's eye view perspective where lines look parallel and vertical.
+I selected four source points for perspective transform to get an approximation as a region of where lanes tend to appear.With perspective transform this region is trasnformed to bird's eye view perspective where lines look parallel and vertical.
  <table style="width:100%">
   <tr>
     <td>Original</td>
@@ -113,7 +113,7 @@ The final step is projecting the measurement back onto the original image. I use
  
 <table style="width:100%">
   <tr>
-    <td><img src="./document/unwarped.png" width="550" height="200"/></td>
+    <td><img src="./document/output.png" width="550" height="200"/></td>
   </tr>
 </table>
  
@@ -140,7 +140,7 @@ I divide the warped-image into 9 windows from y-axis and start processing slides
 With pixel-threshold of 50 pixels, I decide to whether adjust my center-line based on new findings or not. If the condition met in a slide, center-lines are adjusted to the average point of these pixels which enables me to capture curves more precisley. All the good points are collected as a list and passed to polyfit to generate coefficents for drawing left & right lines.
 
 During my experminets on different frames such as printing warped images and detected lines, I noticed high illuminations and dark shadows affect the number of pixels significanlty, which plays a major part in detecting the lines.
-After some research I found *Gamma Correction* to brighten up the images as the ratio of the pixels starts increasing, this modification helps lane line get brighter and sobelx and hls can pick them up in their binary transforms. 
+After some research I found **Gamma Correction** to brighten up the images as the `ratio of the white-pixels` starts increasing. White ratio is the number of white pixels over the total number of pixels in an image, its value was pretty stable around ~3-4%  for good frames and starts rising up as noisy areas approach such as illuminated pavements.  This step helps lane-line get brighter and sobelx and hls can pick them up in their binary transforms. 
 
 I also used Gamma Correction for the challenge video to make it darker, and it performed much better comparing in detecting lines in the lower half of the images.  
 
@@ -161,64 +161,48 @@ As frames populate these class variables I check 3 conditions:
 
 * 3- I find x-mean and y-mean for upper part of the image, (i.e. y in range [0,~300], then calculate the expected x value for y-mean in range of [0,~300] using previous image fit, and compare it to the current x value. Threshold for this coparison is 15. 
 
-* 4- Lastly I calculate the current radius curve and check it to be within 1km, using the project guidelines, I took 1st and 2nd order derivates of Ay^2 + By +C and applied them to the formula below:
+If all conditions are satisfied, frame is a good match and will be appended to my list of line-instances.
+
+If a line didn't meet the criteria, I'll copy the previous-frame's features such as coefficients, allx & ally to the lines and append a copy of the previous frame to line-instances and I increment `bad_frame_counter` by 1.
+After each frame is processed I check the `white ratio` to see if it's decreasing, meaning that bad illumination areas are ending, I also check the number of `bad_frames_counter` to clean my instances cache to cache new information and readjust my lanes.
+
+Lastly, I keep track of the current radius curve to check if it's not exceeding 1km, however sometimes in straight curve radius goes beyond 1km and I assume it's becuase the slope is almost reaching ~0.000 so I decided not to includ it in my evaluation criteria as it causes all of my frames with straight_lanes freeze and copy their previous state. 
+For calculating curve, I used the project guidelines, I took 1st and 2nd order derivates of Ay^2 + By +C and applied them to the formula below:
 
 `R-curve= ((1+(2Ay+B)^2)^(3/2))/∣2A∣`
 
-If all conditions are satisfied, frame is a good match and will be appended to my list of line-instances.
-
-If a line didn't meet the criteria, I'll copy the previous-frame's features such as coefficients, allx & ally to the lines and append a copy of the previous frame to line-instances and I increment bad_frame_counter by 1.
-After each frame is processed I check the white ratio to see if it's decreasing , meaning that bad illumination areas are ending, I also check the number of bad_frames_counter to clean my instances cache to cache new information and readjust my lanes.
-
 Finally I cast the lines onto the original frame and move on to the next frame.
 
-Here's a full flow of original image through the entire pipeline:
+Here's a full flow of original image through the entire pipeline for a good image:
 
 <table style="width:100%">
   <tr>
     <td>Original</td>
-    <td>Undistorted</td>
-    <td>Gradient Sobel x Transform</td>
-  </tr>
-  <tr>
-    <td><img src="./document/fram1-original.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-undistorted.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-sobel.png" width="550" height="200"/></td>
-  </tr>
-  <tr>
-    <td>HLS (S) Transform</td>
-    <td>Combined HLS & Sobelx</td>
-    <td>Region</td>
-  </tr>
-  <tr>
-    <td><img src="./document/fram1-hls.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-hlsandsobel.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-region.png" width="550" height="200"/></td>
-  </tr>
-  <tr>
-    <td>Warped</td>
+    <td>Binary combination With Gamma Correction</td>
     <td>Histogram</td>
-    <td>Sliding Windows</td>
   </tr>
   <tr>
-    <td><img src="./document/fram1-warped.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-histogram.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-sliding-widnows.png" width="550" height="200"/></td>  
+    <td><img src="./document/frame_correction/good_org.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/good_gamma.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/good_hist.png" width="550" height="200"/></td>
   </tr>
   <tr>
-      <td>output</td>
+    <td>Warped with lines</td>
+    <td>Output</td>
   </tr>
   <tr>
-    <td><img src="./document/fram1-output.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/good_lines.png" width="550" height="200"/></td>
+    <td><img src="./document/frame_correction/good_output.png" width="550" height="200"/></td>
   </tr>
 </table>
 
-A sample of high illumniation pavements:
+A sample of high illumniation pavements with Gamma-correction:
+
 <table style="width:100%">
   <tr>
     <td>Original</td>
     <td>Undistorted</td>
-    <td>Gradient Sobel x Transform</td>
+    <td>Gradient Sobel x Transform </td>
   </tr>
   <tr>
     <td><img src="./document/fram1-original.png" width="550" height="200"/></td>
@@ -237,12 +221,10 @@ A sample of high illumniation pavements:
   </tr>
   <tr>
     <td>Warped</td>
-    <td>Histogram</td>
     <td>Sliding Windows</td>
   </tr>
   <tr>
     <td><img src="./document/fram1-warped.png" width="550" height="200"/></td>
-    <td><img src="./document/fram1-histogram.png" width="550" height="200"/></td>
     <td><img src="./document/fram1-sliding-widnows.png" width="550" height="200"/></td>  
   </tr>
   <tr>
@@ -265,25 +247,29 @@ In the frist challenge video, I noticed that low-contrast in challenge video fra
    <tr>
     <td><img src="./document/fram2-original.png" width="550" height="200"/></td>
     <td><img src="./document/fram2-undistorted.png" width="550" height="200"/></td>
-    <td><img src="./document/fram2-sobel.png" width="550" height="200"/></td>
   </tr>
   <tr>
-    <td>Gradient Sobel x Transform Without Gamma</td>
-    <td>HLS (S) Transform</td>
-    <td>Combined HLS and Sobelx and </td>
-    <td>Histogram</td>
+    <td>Gradient Sobel x and HLS (S) Transform Without Gamma-correcttion</td>
+    <td>Warped</td>
   </tr>
   <tr>
     <td><img src="./document/fram2-hls.png" width="550" height="200"/></td>
     <td><img src="./document/fram2-hlsandsobel.png" width="550" height="200"/></td>
-    <td><img src="./document/fram2-histogram.png" width="550" height="200"/></td>
+  </tr>
+   <tr>
+    <td>Gradient Sobel x and HLS (S) and RGB (R) Transform With Gamma-correcttion</td>
+    <td>Warped</td>
   </tr>
   <tr>
-    <td>Sliding Windows</td>
+    <td><img src="./document/fram2-hls.png" width="550" height="200"/></td>
+    <td><img src="./document/fram2-hlsandsobel.png" width="550" height="200"/></td>
   </tr>
   <tr>
-    <td><img src="./document/fram2-histogram-wrong.png" width="550" height="200"/></td>  
+    <td>Output</td>
+    <td>Warped</td>
   </tr>
+  <tr>
+    <td><img src="./document/fram2-hls.png" width="550" height="200"/></td>
 </table>
 
 I managed to fix this issue by gamma correction to make frames darker and icorporating red channel from RGB in my binary trasnformations along with hls and sobelx, which resulted in detecting enough pixels to create a line .
