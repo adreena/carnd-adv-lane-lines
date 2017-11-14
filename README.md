@@ -54,17 +54,20 @@ For simplifying images and focusing only on certain features of the road, I comb
  output of these 2 are then combined into 1 set of points:
  
  <table style="width:100%">
-  <tr>
-    <td>Single Road (1000 epochs without augmentation)</td>
-    <td>Multiple Roads (500 epochs without augmentation)</td>
-    <td>Multiple Roads (1000 epochs with augmentation)</td>
-  </tr>
-  <tr>
-    <td><img src="./runs/single_road/um_000001.png" width="450" height="200"/></td>
-    <td><img src="./runs/multi_road/um_000001.png" width="450" height="200"/></td>
-    <td></td>
-  </tr>
-</table>
+    <tr>
+    <td>Original</td>
+    <td>Sobel X</td>
+    <td>HLS (S)</td>
+    <td>Combined</td>
+    </tr>
+    <tr>
+     <td><img src="./document/combined-1.png" width="450" height="200"/></td>
+     <td><img src="./document/combined-2.png" width="450" height="200"/></td>
+     <td><img src="./document/combined-3.png" width="450" height="200"/></td>
+     <td><img src="./document/combined-4.png" width="450" height="200"/></td>
+     <td></td>
+    </tr>
+  </table>
  
 
 ### 3- Perspective Transform
